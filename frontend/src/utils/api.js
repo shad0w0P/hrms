@@ -21,17 +21,21 @@ export const STATUS_COLORS = {
   Unmarked: { bg: 'transparent',     color: 'var(--txt3)'   },
 }
 
+const API = import.meta.env.VITE_API_URL;
+
 export async function api(path, options = {}) {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API}${path}`, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
     ...options,
     body: options.body ? JSON.stringify(options.body) : undefined,
-  })
+  });
+
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'Request failed' }))
-    throw new Error(err.detail || 'Request failed')
+    const err = await res.json().catch(() => ({ detail: 'Request failed' }));
+    throw new Error(err.detail || 'Request failed');
   }
-  return res.json()
+
+  return res.json();
 }
 
 export function avatarColor(department) {
